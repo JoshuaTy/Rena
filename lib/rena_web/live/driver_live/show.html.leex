@@ -1,0 +1,27 @@
+<h1>Show Driver</h1>
+
+<%= if @live_action in [:edit] do %>
+  <%= live_modal @socket, RenaWeb.DriverLive.FormComponent,
+    id: @driver.id,
+    title: @page_title,
+    action: @live_action,
+    driver: @driver,
+    return_to: Routes.driver_show_path(@socket, :show, @driver) %>
+<% end %>
+
+<ul>
+
+  <li>
+    <strong>Wallet balance:</strong>
+    <%= @driver.wallet_balance %>
+  </li>
+
+  <li>
+    <strong>Is available:</strong>
+    <%= @driver.is_available %>
+  </li>
+
+</ul>
+
+<span><%= live_patch "Edit", to: Routes.driver_show_path(@socket, :edit, @driver), class: "button" %></span>
+<span><%= live_redirect "Back", to: Routes.driver_index_path(@socket, :index) %></span>

@@ -1,0 +1,18 @@
+<h2><%= @title %></h2>
+
+<%= f = form_for @changeset, "#",
+  id: "driver-form",
+  phx_target: @myself,
+  phx_change: "validate",
+  phx_submit: "save" %>
+
+  <%= label f, :wallet_balance %>
+  <%= number_input f, :wallet_balance %>
+  <%= error_tag f, :wallet_balance %>
+
+  <%= label f, :is_available %>
+  <%= checkbox f, :is_available %>
+  <%= error_tag f, :is_available %>
+
+  <%= submit "Save", phx_disable_with: "Saving..." %>
+</form>

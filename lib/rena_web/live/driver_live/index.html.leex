@@ -1,0 +1,37 @@
+<h1>Listing Drivers</h1>
+
+<%= if @live_action in [:new, :edit] do %>
+  <%= live_modal @socket, RenaWeb.DriverLive.FormComponent,
+    id: @driver.id || :new,
+    title: @page_title,
+    action: @live_action,
+    driver: @driver,
+    return_to: Routes.driver_index_path(@socket, :index) %>
+<% end %>
+
+<table>
+  <thead>
+    <tr>
+      <th>Wallet balance</th>
+      <th>Is available</th>
+
+      <th></th>
+    </tr>
+  </thead>
+  <tbody id="drivers">
+    <%= for driver <- @drivers do %>
+      <tr id="driver-<%= driver.id %>">
+        <td><%= driver.wallet_balance %></td>
+        <td><%= driver.is_available %></td>
+
+        <td>
+          <span><%= live_redirect "Show", to: Routes.driver_show_path(@socket, :show, driver) %></span>
+          <span><%= live_patch "Edit", to: Routes.driver_index_path(@socket, :edit, driver) %></span>
+          <span><%= link "Delete", to: "#", phx_click: "delete", phx_value_id: driver.id, data: [confirm: "Are you sure?"] %></span>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<span><%= live_patch "New Driver", to: Routes.driver_index_path(@socket, :new) %></span>

@@ -1,0 +1,47 @@
+version: "3"
+
+services:
+  app:
+    build:
+      context: "."
+    env_file:
+      - ./env/guardian.env
+    environment:
+      PGUSER: postgres
+      PGPASSWORD: postgres
+      PGDATABASE: rena_dev
+      PGHOST: db
+    ports:
+      - "4000:4000"
+    depends_on:
+      - db
+    command: bash -c "mix ecto.setup && mix phx.server"
+    links:
+      - "db:db"
+    networks:
+      - app-net
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/assets/node_modules
+      - /usr/src/app/deps
+      - /usr/src/app/_build
+  db:
+    image: postgres:latest
+    container_name: rena_db
+    ports:
+      - "5434:5434"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      PGDATA: /var/lib/postgresql/data/pgdata
+    restart: always
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    networks:
+      - app-net
+volumes:
+  pgdata:
+
+networks:
+  app-net:
+    driver: bridge
